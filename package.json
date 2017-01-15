@@ -4,6 +4,7 @@
   "description": "Pretty simple test double library",
   "main": "index.js",
   "scripts": {
+    "build": "browserify index.js -o nisemono.js -s nisemono && uglifyjs nisemono.js -o nisemono.min.js",
     "test": "nyc --reporter=lcov --reporter=text --reporter=text-summary mocha",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "lint": "eslint ./**/*.js"
