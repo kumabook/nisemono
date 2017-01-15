@@ -95,7 +95,7 @@ describe('FakeFunction', function() {
     });
   });
 
-  describe('onCall', function(done) {
+  describe('onCall', function() {
     it('should add handler that is called when the func is invoked', function(done) {
       var fetch = nisemono.func();
       fetch.onCall(function() {
@@ -118,7 +118,7 @@ describe('FakeFunction', function() {
         assert.equal(entries.length, 3);
         assert.equal(entries[0], 'entry1');
         done();
-      }, function(e) {
+      }, function() {
         assert.fail();
       });
     });

@@ -1,11 +1,11 @@
-const webpack = require('webpack');
-const path    = require('path');
+var webpack = require('webpack');
+var path    = require('path');
 module.exports = {
   devtool: 'source-map',
-  entry: './',
-  output: {
-    path: path.resolve(__dirname, 'public'),
-    filename: 'nisemono.js',
+  entry:   './',
+  output:  {
+    path:       path.resolve(__dirname, 'public'),
+    filename:   'nisemono.js',
     publicPath: 'nisemono.js',
   },
   resolve: {
@@ -13,7 +13,7 @@ module.exports = {
   },
   plugins: [
     new webpack.ProvidePlugin({
-      'nisemono': 'nisemono',
+      'nisemono':        'nisemono',
       'window.nisemono': 'nisemono'
     })
   ],
