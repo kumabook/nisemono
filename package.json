@@ -1,7 +1,7 @@
 {
   "name": "nisemono",
   "version": "0.0.1",
-  "description": "Pretty simple mock library",
+  "description": "Pretty simple test double library",
   "main": "index.js",
   "scripts": {
     "test": "nyc --reporter=lcov --reporter=text --reporter=text-summary mocha",
