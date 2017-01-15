@@ -1,6 +1,6 @@
 # nisemono
 
-[![Build Status](https://travis-ci.org/kumabook/nisemono.svg?branch=master)](https://travis-ci.org/kumabook/nisemono) [![Coverage Status](https://coveralls.io/repos/github/kumabook/nisemono/badge.svg?branch=master)](https://coveralls.io/github/kumabook/nisemono?branch=master) 
+[![Build Status](https://travis-ci.org/kumabook/nisemono.svg?branch=master)](https://travis-ci.org/kumabook/nisemono) [![Coverage Status](https://coveralls.io/repos/github/kumabook/nisemono/badge.svg?branch=master)](https://coveralls.io/github/kumabook/nisemono?branch=master) [![Code Climate](https://codeclimate.com/github/kumabook/nisemono/badges/gpa.svg)](https://codeclimate.com/github/kumabook/nisemono)
 
 Simple and thin test double library.
 
