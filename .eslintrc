@@ -1,0 +1,6 @@
+{
+  "extends": "es3",
+  "rules": {
+    "guard-for-in": "off"
+  }
+}
