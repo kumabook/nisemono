@@ -14,8 +14,8 @@ var nisemono = require('nisemono');
 var sum      = nisemono.func();
 
 sum.expects()
-    .withArgs(1, 2, 3)
-    .returns(6);
+   .withArgs(1, 2, 3)
+   .returns(6);
 
 var v = sum(1, 2, 3);
 assert(v === 6);
@@ -30,8 +30,8 @@ var nisemono = require('nisemono');
 var sum      = nisemono.func();
 
 sum.expects()
-    .withArgs('one')
-    .throws(new Error('bad argument'));
+   .withArgs('one')
+   .throws(new Error('bad argument'));
 
 sum('one'); // throw error
 
@@ -45,7 +45,7 @@ sum('one'); // throw error
 var nisemono = require('nisemono');
 var fetch    = nisemono.func();
 
-fetch.onCall(function() {
+fetch.expects().calls(function() {
   fetch.callArgFuncAt(2, ['entry1', 'entry2', 'entry3']);
   // or
   fetch.callArgFuncAt(3, new Error('network error'));
@@ -55,6 +55,33 @@ fetch('GET', 'http://www.example.com/entries', function(entries) {
   assert(entries.length === 3);
   assert(entries[0] === 'entry1');
 }, function(e) {
+  assert(e.message === 'network error');
+});
+
+```
+
+### Promise
+
+```
+var nisemono = require('nisemono');
+var fetch    = nisemono.func();
+
+fetch.expects().resolves(new Error('network error'));
+
+fetch('GET', 'http://www.example.com/entries').then(function(entries) {
+  assert(entries.length === 3);
+  assert(entries[0] === 'entry1');
+});
+
+```
+
+```
+var nisemono = require('nisemono');
+var fetch    = nisemono.func();
+
+fetch.expects().rejects(['entry1', 'entry2', 'entry3']);
+
+fetch('GET', 'http://www.example.com/entries').then(function(e) {
   assert(e.message === 'network error');
 });
 
