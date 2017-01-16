@@ -80,7 +80,7 @@ describe('FakeFunction', function() {
         }, 'parameters must be numbers');
       });
     });
-    context('with only return value expectation', function() {
+    context('without args expectation', function() {
       var fakeFunc;
       beforeEach(function() {
         fakeFunc = nisemono.func();
@@ -93,16 +93,37 @@ describe('FakeFunction', function() {
         assert.equal(fakeFunc('1'), 6);
       });
     });
-  });
-
-  describe('onCall', function() {
-    it('should add handler that is called when the func is invoked', function(done) {
-      var fetch = nisemono.func();
-      fetch.onCall(function() {
-        done();
+    context('with resolve expectation', function() {
+      var fakeFunc;
+      beforeEach(function() {
+        fakeFunc = nisemono.func();
+        fakeFunc.expects()
+                .resolves(1);
       });
-      var emptyFunc = function() {};
-      fetch('GET', 'http://www.example.com/entries', emptyFunc, emptyFunc);
+      it('should always return a promise that resolves with the specified value', function(done) {
+        fakeFunc().then(function(value) {
+          assert.equal(value, 1);
+          done();
+        }, function() {
+          assert.fail();
+        });
+      });
+    });
+    context('with reject expectation', function() {
+      var fakeFunc;
+      beforeEach(function() {
+        fakeFunc = nisemono.func();
+        fakeFunc.expects()
+                .rejects('reason');
+      });
+      it('should always return a promise that rejects with the specified value', function(done) {
+        fakeFunc().then(function() {
+          assert.fail();
+        }, function(reason) {
+          assert.equal(reason, 'reason');
+          done();
+        });
+      });
     });
   });
 
@@ -110,7 +131,7 @@ describe('FakeFunction', function() {
     it('should calls argument function at index with specified args', function(done) {
       var fetch = nisemono.func();
 
-      fetch.onCall(function() {
+      fetch.expects().calls(function() {
         fetch.callArgFuncAt(2, ['entry1', 'entry2', 'entry3']);
       });
 
