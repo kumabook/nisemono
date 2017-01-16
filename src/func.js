@@ -1,5 +1,5 @@
-var Expectation = require('./expectation');
-var Call        = require('./call');
+var Expectation  = require('./expectation');
+var Call         = require('./call');
 
 var func = function() {
   var f = function() {
@@ -39,11 +39,7 @@ var FakeFunction = {
     for (i = 0; i < l; i++) {
       expectation = this.expectations[i];
       if (expectation.isMeet(args)) {
-        expectation.isFulfilled = true;
-        if (expectation.thrownError !== null) {
-          throw expectation.thrownError;
-        }
-        return expectation.returnValue;
+        return expectation.invoke();
       }
     }
     return undefined;
@@ -52,10 +48,6 @@ var FakeFunction = {
     var args = Array.prototype.slice.call(arguments, 1);
     var last = this.calls.length - 1;
     return this.calls[last].args[index].apply(thisArg, args);
-  },
-  onCall: function(handler) {
-    this.handler = handler;
-    return this;
   }
 };
 
