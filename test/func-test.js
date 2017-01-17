@@ -1,7 +1,6 @@
 var assert      = require('assert');
 var TestHelper  = require('./test-helper');
 var nisemono    = require('../');
-var Expectation = require('../src/expectation');
 var Call        = require('../src/call');
 
 describe('nisemono', function() {

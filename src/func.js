@@ -1,5 +1,4 @@
-var Expectation  = require('./expectation');
-var Call         = require('./call');
+var Call = require('./call');
 
 var func = function() {
   var f = function() {
