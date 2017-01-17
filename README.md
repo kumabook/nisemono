@@ -13,9 +13,9 @@ Simple and thin test double library.
 var nisemono = require('nisemono');
 var sum      = nisemono.func();
 
-sum.expects()
-   .withArgs(1, 2, 3)
-   .returns(6);
+nisemono.expects(sum)
+        .withArgs(1, 2, 3)
+        .returns(6);
 
 var v = sum(1, 2, 3);
 assert(v === 6);
@@ -29,9 +29,9 @@ assert(v === 6);
 var nisemono = require('nisemono');
 var sum      = nisemono.func();
 
-sum.expects()
-   .withArgs('one')
-   .throws(new Error('bad argument'));
+nisemono.expects(sum)
+        .withArgs('one')
+        .throws(new Error('bad argument'));
 
 sum('one'); // throw error
 
@@ -45,7 +45,7 @@ sum('one'); // throw error
 var nisemono = require('nisemono');
 var fetch    = nisemono.func();
 
-fetch.expects().calls(function() {
+nisemono.expects(fetch).calls(function() {
   fetch.callArgFuncAt(2, ['entry1', 'entry2', 'entry3']);
   // or
   fetch.callArgFuncAt(3, new Error('network error'));
@@ -66,7 +66,7 @@ fetch('GET', 'http://www.example.com/entries', function(entries) {
 var nisemono = require('nisemono');
 var fetch    = nisemono.func();
 
-fetch.expects().resolves(new Error('network error'));
+nisemono.expects(fetch).resolves(new Error('network error'));
 
 fetch('GET', 'http://www.example.com/entries').then(function(entries) {
   assert(entries.length === 3);
@@ -79,7 +79,7 @@ fetch('GET', 'http://www.example.com/entries').then(function(entries) {
 var nisemono = require('nisemono');
 var fetch    = nisemono.func();
 
-fetch.expects().rejects(['entry1', 'entry2', 'entry3']);
+nisemono.expects(fetch).rejects(['entry1', 'entry2', 'entry3']);
 
 fetch('GET', 'http://www.example.com/entries').then(function(e) {
   assert(e.message === 'network error');

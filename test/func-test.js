@@ -9,26 +9,16 @@ describe('nisemono', function() {
     it('should return a fake function', function() {
       var fakeFunc = nisemono.func();
       assert.ok(TestHelper.isFunc(fakeFunc));
-      assert.notEqual(undefined, fakeFunc.expects);
+      assert.notEqual(undefined, fakeFunc.expectations);
       assert.notEqual(undefined, fakeFunc.calls);
-      assert.equal(fakeFunc.expects.length, 0);
-      assert.equal(fakeFunc.calls.length  , 0);
-      assert.ok(TestHelper.isFunc(fakeFunc.expects));
+      assert.equal(fakeFunc.expectations.length, 0);
+      assert.equal(fakeFunc.calls.length       , 0);
       assert.ok(TestHelper.isFunc(fakeFunc.invoke));
     });
   });
 });
 
 describe('FakeFunction', function() {
-  describe('expects', function() {
-    it('should return new empty expectation', function() {
-      var fakeFunc    = nisemono.func();
-      var expectation = fakeFunc.expects();
-      assert.ok(expectation instanceof Expectation);
-      assert.equal(fakeFunc.expectations.length, 1);
-    });
-  });
-
   describe('invoke', function() {
     context('no expectation', function() {
       var fakeFunc;
@@ -54,7 +44,7 @@ describe('FakeFunction', function() {
       var fakeFunc;
       beforeEach(function() {
         fakeFunc = nisemono.func();
-        fakeFunc.expects()
+        nisemono.expects(fakeFunc)
                 .withArgs(1, 2, 3)
                 .returns(6);
       });
@@ -70,7 +60,7 @@ describe('FakeFunction', function() {
       var fakeFunc;
       beforeEach(function() {
         fakeFunc = nisemono.func();
-        fakeFunc.expects()
+        nisemono.expects(fakeFunc)
                 .withArgs('1', '2', '3')
           .throws(new Error('parameters must be numbers'));
       });
@@ -84,7 +74,7 @@ describe('FakeFunction', function() {
       var fakeFunc;
       beforeEach(function() {
         fakeFunc = nisemono.func();
-        fakeFunc.expects()
+        nisemono.expects(fakeFunc)
                 .returns(6);
       });
       it('should always return value of expectation', function() {
@@ -97,7 +87,7 @@ describe('FakeFunction', function() {
       var fakeFunc;
       beforeEach(function() {
         fakeFunc = nisemono.func();
-        fakeFunc.expects()
+        nisemono.expects(fakeFunc)
                 .resolves(1);
       });
       it('should always return a promise that resolves with the specified value', function(done) {
@@ -113,7 +103,7 @@ describe('FakeFunction', function() {
       var fakeFunc;
       beforeEach(function() {
         fakeFunc = nisemono.func();
-        fakeFunc.expects()
+        nisemono.expects(fakeFunc)
                 .rejects('reason');
       });
       it('should always return a promise that rejects with the specified value', function(done) {
@@ -131,7 +121,7 @@ describe('FakeFunction', function() {
     it('should calls argument function at index with specified args', function(done) {
       var fetch = nisemono.func();
 
-      fetch.expects().calls(function() {
+      nisemono.expects(fetch).calls(function() {
         fetch.callArgFuncAt(2, ['entry1', 'entry2', 'entry3']);
       });
 

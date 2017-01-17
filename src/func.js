@@ -16,11 +16,6 @@ var func = function() {
 };
 
 var FakeFunction = {
-  expects: function() {
-    var expectation = new Expectation();
-    this.expectations.push(expectation);
-    return expectation;
-  },
   invoke: function() {
     var args = Array.prototype.slice.call(arguments);
     var call = new Call({
