@@ -19,7 +19,7 @@ describe('nisemono', function() {
 });
 
 describe('FakeFunction', function() {
-  describe('invoke', function() {
+  describe('.invoke', function() {
     context('no expectation', function() {
       var fakeFunc;
       beforeEach(function() {
