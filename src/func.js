@@ -8,9 +8,7 @@ var func = function() {
   f.calls        = [];
   f.isCalled     = false;
   f.handler      = function() {};
-  for (var key in FakeFunction) {
-    f[key] = FakeFunction[key];
-  }
+  f.__proto__    = FakeFunction;
   return f;
 };
 
