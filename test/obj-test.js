@@ -30,9 +30,9 @@ describe('nisemono', function() {
       assert.ok(TestHelper.isFakeFunc(fake.method2));
       assert.ok(TestHelper.isFakeFunc(fake.method3));
     });
-    context('excepts', function() {
-      it('should return a fake object that has fake methods excepts specified methods', function() {
-        var fake = nisemono.obj(obj, { excepts: ['method1'] });
+    context('except', function() {
+      it('should return a fake object that has fake methods except of specified methods', function() {
+        var fake = nisemono.obj(obj, { except: ['method1'] });
 
         assert.ok(TestHelper.isFunc(obj.method1));
         assert.ok(TestHelper.isFunc(obj.method2));
@@ -56,9 +56,9 @@ describe('nisemono', function() {
         assert.ok(!TestHelper.isFakeFunc(fake.method3));
       });
     });
-    context('excepts&only', function() {
+    context('except&only', function() {
       it('should return a fake object that has specified fake methods', function() {
-        var fake = nisemono.obj(obj, { only: ['method1', 'method2'], excepts: ['method1'] });
+        var fake = nisemono.obj(obj, { only: ['method1', 'method2'], except: ['method1'] });
 
         assert.ok(TestHelper.isFunc(obj.method1));
         assert.ok(TestHelper.isFunc(obj.method2));

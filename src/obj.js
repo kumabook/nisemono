@@ -8,10 +8,10 @@ var obj = function(object, opts) {
   var key;
   var fake    = {};
   var options = opts || {};
-  var excepts = options.excepts || [];
+  var except  = options.except || [];
   var only    = options.only || keys(object);
   for (key in object) {
-    if (isFunc(object[key]) && !contains(key, excepts) && contains(key, only)) {
+    if (isFunc(object[key]) && !contains(key, except) && contains(key, only)) {
       fake[key] = func();
     } else {
       fake[key] = object[key];
