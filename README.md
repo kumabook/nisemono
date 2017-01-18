@@ -6,7 +6,12 @@ Simple and thin test double library.
 
 ## How to use
 
-### args and returns
+### `nisemono.func()`
+
+`nisemono.func()` create a fake function.
+You can add expectation of the method behavior.
+
+#### returns
 
 ```js
 
@@ -22,7 +27,7 @@ assert(v === 6);
 
 ```
 
-### throws
+#### throws
 
 ```js
 
@@ -37,7 +42,7 @@ sum('one'); // throw error
 
 ```
 
-### callback
+#### callback
 
 
 ```js
@@ -60,7 +65,7 @@ fetch('GET', 'http://www.example.com/entries', function(entries) {
 
 ```
 
-### Promise
+#### Promise
 
 ```
 var nisemono = require('nisemono');
@@ -84,6 +89,40 @@ nisemono.expects(fetch).rejects(['entry1', 'entry2', 'entry3']);
 fetch('GET', 'http://www.example.com/entries').then(function(e) {
   assert(e.message === 'network error');
 });
+
+```
+
+### `nisemono.obj()`
+
+`nisemono.obj()` creates a clone object that has fake methods
+instead of original methods.
+
+```
+var nisemono = require('nisemono');
+
+var obj = {
+  method1:  function() { return 1; },
+  method2:  function() { return 2; },
+  property: 'property'
+};
+obj.__proto__ = {
+  method3:       function() { return 3; },
+  protoProperty: 'protoProperty'
+};
+
+var niseObj1 = nisemono.obj(obj, { only: ['method1', 'method2']);
+nisemono.expects(niseObj1.method1).returns('nise1');
+nisemono.expects(niseObj1.method1).returns('nise2');
+
+assert.equal(niseObj1.method1(), 'nise1');
+assert.equal(niseObj1.method1(), 'nise2');
+
+var niseObj2 = nisemono.obj(obj, { except: ['method1']);
+nisemono.expects(niseObj2.method2).returns('nise2');
+nisemono.expects(niseObj2.method3).returns('nise3');
+
+assert.equal(niseObj2.method1(), 'nise1');
+assert.equal(niseObj2.method1(), 'nise2');
 
 ```
 
