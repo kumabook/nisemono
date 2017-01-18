@@ -92,6 +92,15 @@ fetch('GET', 'http://www.example.com/entries').then(function(e) {
 
 ```
 
+If you want to use non-standard promise implementation,
+register Promise contructor with `nisemono.promise.use(Promise)`:
+
+```js
+
+nisemono.promise.use(require('yakusoku'));
+
+```
+
 ### `nisemono.obj()`
 
 `nisemono.obj()` creates a clone object that has fake methods
