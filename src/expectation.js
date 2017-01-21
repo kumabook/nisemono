@@ -40,11 +40,13 @@ Expectation.prototype.throws = function(error) {
 Expectation.prototype.resolves = function(value) {
   this.resolvedValue = value;
   this.resultType    = ResultType.RESOLVE;
+  return this;
 };
 
 Expectation.prototype.rejects = function(reason) {
   this.rejectedReason = reason;
   this.resultType     = ResultType.REJECT;
+  return this;
 };
 
 Expectation.prototype.calls = function(func, thisArg) {
@@ -54,6 +56,7 @@ Expectation.prototype.calls = function(func, thisArg) {
     thisArg: thisArg,
     args:    args
   });
+  return this;
 };
 
 Expectation.prototype.isMeet = function(actualArgs) {
