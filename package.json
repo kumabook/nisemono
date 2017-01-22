@@ -26,7 +26,9 @@
   "devDependencies": {
     "browserify": "^13.3.0",
     "coveralls": "^2.11.15",
+    "docdash": "^0.4.0",
     "eslint": "^3.13.1",
+    "jsdoc": "^3.4.3",
     "mocha": "^3.2.0",
     "nyc": "^10.0.0",
     "uglify-js": "^2.7.5"
