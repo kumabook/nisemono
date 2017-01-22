@@ -6,7 +6,9 @@ var ResultType = {
   RESOLVE: 2,
   REJECT:  3
 };
-
+/**
+ * @class
+ */
 var Expectation = function() {
   this.hasArgs        = false;
   this.args           = [];
@@ -15,40 +17,69 @@ var Expectation = function() {
   this.resolvedValue  = null;
   this.rejectedReason = null;
   this.callbacks      = [];
-  this.isFulfilled    = false;
   this.resultType     = ResultType.RETURN;
+  /**
+   * bool value if the expectation is fulfilled or not
+   * @instance
+   * @type {bool}
+   */
+  this.isFulfilled    = false;
 };
 
+/**
+ * Add condition about arguments
+ * @return {Expectation}
+ */
 Expectation.prototype.withArgs = function() {
   this.hasArgs = true;
   this.args    = Array.prototype.slice.call(arguments);
   return this;
 };
 
+/**
+ * Expects the function returns specified value
+ * @return {Expectation}
+ */
 Expectation.prototype.returns = function(value) {
   this.returnValue = value;
   this.resultType  = ResultType.RETURN;
   return this;
 };
 
+/**
+ * Expects the function throws specified error
+ * @return {Expectation}
+ */
 Expectation.prototype.throws = function(error) {
   this.thrownError = error;
   this.resultType  = ResultType.THROW;
   return this;
 };
 
+/**
+ * Expects the function returns a promise object that resolves specified value
+ * @return {Expectation}
+ */
 Expectation.prototype.resolves = function(value) {
   this.resolvedValue = value;
   this.resultType    = ResultType.RESOLVE;
   return this;
 };
 
+/**
+ * Expects the function returns a promise object that rejects specified value
+ * @return {Expectation}
+ */
 Expectation.prototype.rejects = function(reason) {
   this.rejectedReason = reason;
   this.resultType     = ResultType.REJECT;
   return this;
 };
 
+/**
+ * Expects the function calls specified function
+ * @return {Expectation}
+ */
 Expectation.prototype.calls = function(func, thisArg) {
   var args = Array.prototype.slice.call(arguments, 2);
   this.callbacks.push({
