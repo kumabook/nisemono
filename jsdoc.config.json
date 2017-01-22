@@ -1,0 +1,16 @@
+{
+  "source": {
+    "include": ["README.md", "index.js", "src/"],
+    "includePattern": ".+\\.js(doc)?$",
+     "excludePattern": "(^|\\/|\\\\)_"
+  },
+  "plugins": ["plugins/markdown"],
+  "opts": {
+    "template": "node_modules/docdash",
+    "destination": "./doc/"
+  },
+  "docdash": {
+    "static": true,
+    "sort": false
+  }
+}
