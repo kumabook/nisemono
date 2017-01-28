@@ -1,12 +1,21 @@
 language: node_js
 node_js:
-  - "stable"
-  - "6"
-  - "5"
-  - "5.1"
-  - "4"
-  - "4.2"
-  - "4.1"
-  - "4.0"
-  - "0.12"
+- stable
+- '6'
+- '5'
+- '5.1'
+- '4'
+- '4.2'
+- '4.1'
+- '4.0'
+- '0.12'
 after_success: npm run coverage
+deploy:
+  provider: releases
+  api_key:
+    secure: Kfp0sPu4Q5D2cWEnDo88wzVQGcpXKK4JCrm+wYZyNDpVIFC4KscT4KIdze73FRQpdl00jv4RTXKdddnFRNvssTTFPYyfzUTniwoRLPzNicSlkrq3jwlynwk4O1a+UZbcQEzBUOXxmrrGJf2+S7f4vugHA7hUe2AVysxXartXOtJCkFCVsn0zLg7r9PMUO3c9NBjGaujpOxj9f1yp4l/+l8/jgS5drcHIumP45dAqomRh2w2ygxa1tj0wp6bwXf0TOADja7bnHPzqICNvw/0kN/c6Gfy5DrX1jIerZxC9T8P6FNBScfSCphs06xKKFS2JAxYdkzJWWs7gW65DDZq4wgTQR0nu1NMoKVv4nTWb0c/gPuv5yftL6NtMU1QmdOYBlHYLvRCcGkmTaqQEvEtvjeCtSPGfIGtDs8xI1Xv1ZJXNj6x1SFNhAXEnvfp7hsFG1QYxRh6+3e4zDoEf29bZAISn6oZDYOanxlKyV5kH6eqtLSVQoRf+k3f5oChgGG8vPnnkzGIi6uoKdxOMhB0DT3M4Fwnmfi4VfsKXFNIW7PoCWchSyVPPFIA4deZ4ILPVi1BA6MRVbj21MeZf9v3h6TKVqLf4PdC5pYmp7Vpxe9lTE/zM7NTA8hvDyo2Mj5XuLwnAVz7IWyRMJLoXJyVSbpW4VIVEzVfJ79CB1FnL720=
+  file:
+    - nisemono.js
+    - nisemono.min.js
+  on:
+    repo: kumabook/nisemono
