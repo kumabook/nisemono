@@ -9,15 +9,28 @@ node_js:
 - '4.1'
 - '4.0'
 - '0.12'
-before_script: npm run build
-after_success: npm run coverage
+after_success:
+  - npm run coverage
+  - npm run build
 deploy:
   provider: releases
-  skip_cleanup: true
   api_key:
     secure: Kfp0sPu4Q5D2cWEnDo88wzVQGcpXKK4JCrm+wYZyNDpVIFC4KscT4KIdze73FRQpdl00jv4RTXKdddnFRNvssTTFPYyfzUTniwoRLPzNicSlkrq3jwlynwk4O1a+UZbcQEzBUOXxmrrGJf2+S7f4vugHA7hUe2AVysxXartXOtJCkFCVsn0zLg7r9PMUO3c9NBjGaujpOxj9f1yp4l/+l8/jgS5drcHIumP45dAqomRh2w2ygxa1tj0wp6bwXf0TOADja7bnHPzqICNvw/0kN/c6Gfy5DrX1jIerZxC9T8P6FNBScfSCphs06xKKFS2JAxYdkzJWWs7gW65DDZq4wgTQR0nu1NMoKVv4nTWb0c/gPuv5yftL6NtMU1QmdOYBlHYLvRCcGkmTaqQEvEtvjeCtSPGfIGtDs8xI1Xv1ZJXNj6x1SFNhAXEnvfp7hsFG1QYxRh6+3e4zDoEf29bZAISn6oZDYOanxlKyV5kH6eqtLSVQoRf+k3f5oChgGG8vPnnkzGIi6uoKdxOMhB0DT3M4Fwnmfi4VfsKXFNIW7PoCWchSyVPPFIA4deZ4ILPVi1BA6MRVbj21MeZf9v3h6TKVqLf4PdC5pYmp7Vpxe9lTE/zM7NTA8hvDyo2Mj5XuLwnAVz7IWyRMJLoXJyVSbpW4VIVEzVfJ79CB1FnL720=
   file:
     - nisemono.js
     - nisemono.min.js
+  skip_cleanup: true
   on:
-    repo: kumabook/nisemono
+    tags: true
+after_deploy:
+  - npm run doc
+  - git add doc nisemono.js nisemono.min.js
+  - git commit -m 'Add api doc'
+  - git push --force https://$GH_TOKEN@github.com/kumabook/nisemono.git HEAD:gh-pages
+env:
+  global:
+    - GIT_COMMITTER_NAME=Hiroki Kumamoto
+    - GIT_COMMITTER_EMAIL=kumabook@live.jp
+    - GIT_AUTHOR_NAME=Hiroki Kumamoto
+    - GIT_AUTHOR_EMAIL=kumabook@live.jp
+    - secure: jxtcC960XKO+mag6dDDtGW/tkImCcblcdLN5zcoLCrX2fz4kB5nyie9zhbPt8wOgAOCMu9w8+Nt6zKjB8e5GsF145PfpI41iCy8YxNVNOZoDRQHV16nswDwZ9wol9FGDqCpyJIbB6iRxkKjxhUCVZmTmfrrkOg8tPtMUn8Utg+8pBdI8rQfj2/iShqKGKqWLYNMFxlZ+BvL0QShR4RNSqvLEWMQwf2W4/JxpADXJY9hmZyvGVcXVJv52RprJBIHeBEWHSO6IaztUPoNo2Nv3HHv9h+j5N2vxoHlzP42TM3w/6fpehgQ1a3bA5gKwHVMFJWJ/yzErbaceIrHz67Gj/J1YyBtvhI+4H4DjZeJpGgsvK7mDRtYYJhSkPxA2ass5Dvruiodzlq6wkCKiAl7oMybXuHd56o5xo+ofGy0NQP5XPsMrT/iHsbnS4U/jxHscyuMEb3jIH8/o773cVMPyo4cfG5HjMqQ9251kgckNh6v8UBOcaFIX7KPQvvZzVMng8XmTEY42rSGvfwiRSEZtU3kvZBrj9qWGOuvP4eYTJlyrjXMSRJBXtlNNAHOXGtN6iKtooYslIyqDbiXImVicFtEdad1yFC1EwcsDxyr74ige6kR6Fd8szEUjw4edoXHaBoEoagdrLajUL2RreBZZiqYOJJuwsc5djOwTvdGeN94=
