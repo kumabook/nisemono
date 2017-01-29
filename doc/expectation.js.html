@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>expectation.js - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Call.html">Call</a></li><li><a href="Expectation.html">Expectation</a><ul class='methods'><li data-type='method'><a href="Expectation.html#withArgs">withArgs</a></li><li data-type='method'><a href="Expectation.html#returns">returns</a></li><li data-type='method'><a href="Expectation.html#throws">throws</a></li><li data-type='method'><a href="Expectation.html#resolves">resolves</a></li><li data-type='method'><a href="Expectation.html#rejects">rejects</a></li><li data-type='method'><a href="Expectation.html#calls">calls</a></li></ul></li><li><a href="FakeFunction.html">FakeFunction</a><ul class='methods'><li data-type='method'><a href="FakeFunction.html#callArgFuncAt">callArgFuncAt</a></li></ul></li></ul><h3>Namespaces</h3><ul><li><a href="promise.html">promise</a><ul class='methods'><li data-type='method'><a href="promise.html#.constructor">constructor</a></li><li data-type='method'><a href="promise.html#.use">use</a></li><li data-type='method'><a href="promise.html#.restoreDefault">restoreDefault</a></li></ul></li></ul><h3>Global</h3><ul><li><a href="global.html#expects">expects</a></li><li><a href="global.html#func">func</a></li><li><a href="global.html#obj">obj</a></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">expectation.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>var promise = require('./promise');
+
+var ResultType = {
+  RETURN:  0,
+  THROW:   1,
+  RESOLVE: 2,
+  REJECT:  3
+};
+/**
+ * @class
+ */
+var Expectation = function() {
+  this.hasArgs        = false;
+  this.args           = [];
+  this.returnValue    = null;
+  this.thrownError    = null;
+  this.resolvedValue  = null;
+  this.rejectedReason = null;
+  this.callbacks      = [];
+  this.resultType     = ResultType.RETURN;
+  /**
+   * bool value if the expectation is fulfilled or not
+   * @instance
+   * @type {bool}
+   */
+  this.isFulfilled    = false;
+};
+
+/**
+ * Add condition about arguments
+ * @return {Expectation}
+ */
+Expectation.prototype.withArgs = function() {
+  this.hasArgs = true;
+  this.args    = Array.prototype.slice.call(arguments);
+  return this;
+};
+
+/**
+ * Expects the function returns specified value
+ * @return {Expectation}
+ */
+Expectation.prototype.returns = function(value) {
+  this.returnValue = value;
+  this.resultType  = ResultType.RETURN;
+  return this;
+};
+
+/**
+ * Expects the function throws specified error
+ * @return {Expectation}
+ */
+Expectation.prototype.throws = function(error) {
+  this.thrownError = error;
+  this.resultType  = ResultType.THROW;
+  return this;
+};
+
+/**
+ * Expects the function returns a promise object that resolves specified value
+ * @return {Expectation}
+ */
+Expectation.prototype.resolves = function(value) {
+  this.resolvedValue = value;
+  this.resultType    = ResultType.RESOLVE;
+  return this;
+};
+
+/**
+ * Expects the function returns a promise object that rejects specified value
+ * @return {Expectation}
+ */
+Expectation.prototype.rejects = function(reason) {
+  this.rejectedReason = reason;
+  this.resultType     = ResultType.REJECT;
+  return this;
+};
+
+/**
+ * Expects the function calls specified function
+ * @return {Expectation}
+ */
+Expectation.prototype.calls = function(func, thisArg) {
+  var args = Array.prototype.slice.call(arguments, 2);
+  this.callbacks.push({
+    func:    func,
+    thisArg: thisArg,
+    args:    args
+  });
+  return this;
+};
+
+Expectation.prototype.isMeet = function(actualArgs) {
+  if (!this.hasArgs) {
+    return true;
+  }
+  var l = actualArgs.length;
+  if (l !== this.args.length) {
+    return false;
+  }
+  for (var i = 0; i &lt; l; i++) {
+    if (actualArgs[i] !== this.args[i]) {
+      return false;
+    }
+  }
+  return true;
+};
+
+Expectation.prototype.invoke = function() {
+  this.isFulfilled = true;
+  var l = this.callbacks.length;
+  var callback;
+
+  for (var i = 0; i &lt; l; i++) {
+    callback = this.callbacks[i];
+    try {
+      callback.func.apply(callback.thisArg, callback.args);
+    } catch(e) {
+      // do nothing
+    }
+  }
+
+  switch (this.resultType) {
+  case ResultType.RETURN:
+    return this.returnValue;
+  case ResultType.THROW:
+    throw this.thrownError;
+  case ResultType.RESOLVE:
+    return promise.constructor().resolve(this.resolvedValue);
+  case ResultType.REJECT:
+    return promise.constructor().reject(this.rejectedReason);
+  default:
+    throw new Error('Unknown result type');
+  }
+};
+
+Expectation.ResultType = ResultType;
+module.exports         = Expectation;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Sun Jan 29 2017 00:05:33 GMT+0000 (UTC) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>

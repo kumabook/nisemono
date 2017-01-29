@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Home - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Call.html">Call</a></li><li><a href="Expectation.html">Expectation</a><ul class='methods'><li data-type='method'><a href="Expectation.html#withArgs">withArgs</a></li><li data-type='method'><a href="Expectation.html#returns">returns</a></li><li data-type='method'><a href="Expectation.html#throws">throws</a></li><li data-type='method'><a href="Expectation.html#resolves">resolves</a></li><li data-type='method'><a href="Expectation.html#rejects">rejects</a></li><li data-type='method'><a href="Expectation.html#calls">calls</a></li></ul></li><li><a href="FakeFunction.html">FakeFunction</a><ul class='methods'><li data-type='method'><a href="FakeFunction.html#callArgFuncAt">callArgFuncAt</a></li></ul></li></ul><h3>Namespaces</h3><ul><li><a href="promise.html">promise</a><ul class='methods'><li data-type='method'><a href="promise.html#.constructor">constructor</a></li><li data-type='method'><a href="promise.html#.use">use</a></li><li data-type='method'><a href="promise.html#.restoreDefault">restoreDefault</a></li></ul></li></ul><h3>Global</h3><ul><li><a href="global.html#expects">expects</a></li><li><a href="global.html#func">func</a></li><li><a href="global.html#obj">obj</a></li></ul>
+</nav>
+
+<div id="main">
+    
+
+    
+
+
+
+    
+
+
+
+
+
+
+
+
+
+    
+
+
+    <section class="readme">
+        <article><h1>nisemono</h1><p><a href="https://travis-ci.org/kumabook/nisemono"><img src="https://travis-ci.org/kumabook/nisemono.svg?branch=master" alt="Build Status"></a> <a href="https://coveralls.io/github/kumabook/nisemono?branch=master"><img src="https://coveralls.io/repos/github/kumabook/nisemono/badge.svg?branch=master" alt="Coverage Status"></a> <a href="https://codeclimate.com/github/kumabook/nisemono"><img src="https://codeclimate.com/github/kumabook/nisemono/badges/gpa.svg" alt="Code Climate"></a></p>
+<p>Simple and thin test double library.</p>
+<h2>How to use</h2><h3><code>nisemono.func()</code></h3><p><code>nisemono.func()</code> create a fake function.
+You can add expectation of the method behavior.</p>
+<h4>returns</h4><pre class="prettyprint source lang-js"><code>
+var nisemono = require('nisemono');
+var sum      = nisemono.func();
+
+nisemono.expects(sum)
+        .withArgs(1, 2, 3)
+        .returns(6);
+
+var v = sum(1, 2, 3);
+assert(v === 6);</code></pre><h4>throws</h4><pre class="prettyprint source lang-js"><code>
+var nisemono = require('nisemono');
+var sum      = nisemono.func();
+
+nisemono.expects(sum)
+        .withArgs('one')
+        .throws(new Error('bad argument'));
+
+sum('one'); // throw error</code></pre><h4>callback</h4><pre class="prettyprint source lang-js"><code>
+var nisemono = require('nisemono');
+var fetch    = nisemono.func();
+
+nisemono.expects(fetch).calls(function() {
+  fetch.callArgFuncAt(2, ['entry1', 'entry2', 'entry3']);
+  // or
+  fetch.callArgFuncAt(3, new Error('network error'));
+});
+
+fetch('GET', 'http://www.example.com/entries', function(entries) {
+  assert(entries.length === 3);
+  assert(entries[0] === 'entry1');
+}, function(e) {
+  assert(e.message === 'network error');
+});</code></pre><h4>Promise</h4><pre class="prettyprint source"><code>var nisemono = require('nisemono');
+var fetch    = nisemono.func();
+
+nisemono.expects(fetch).resolves(new Error('network error'));
+
+fetch('GET', 'http://www.example.com/entries').then(function(entries) {
+  assert(entries.length === 3);
+  assert(entries[0] === 'entry1');
+});</code></pre><pre class="prettyprint source"><code>var nisemono = require('nisemono');
+var fetch    = nisemono.func();
+
+nisemono.expects(fetch).rejects(['entry1', 'entry2', 'entry3']);
+
+fetch('GET', 'http://www.example.com/entries').then(function(e) {
+  assert(e.message === 'network error');
+});</code></pre><p>If you want to use non-standard promise implementation,
+register Promise contructor with <code>nisemono.promise.use(Promise)</code>:</p>
+<pre class="prettyprint source lang-js"><code>
+nisemono.promise.use(require('yakusoku'));</code></pre><h3><code>nisemono.obj()</code></h3><p><code>nisemono.obj()</code> creates a clone object that has fake methods
+instead of original methods.</p>
+<pre class="prettyprint source"><code>var nisemono = require('nisemono');
+
+var obj = {
+  method1:  function() { return 1; },
+  method2:  function() { return 2; },
+  property: 'property'
+};
+obj.__proto__ = {
+  method3:       function() { return 3; },
+  protoProperty: 'protoProperty'
+};
+
+var niseObj1 = nisemono.obj(obj, { only: ['method1', 'method2']);
+nisemono.expects(niseObj1.method1).returns('nise1');
+nisemono.expects(niseObj1.method1).returns('nise2');
+
+assert.equal(niseObj1.method1(), 'nise1');
+assert.equal(niseObj1.method1(), 'nise2');
+
+var niseObj2 = nisemono.obj(obj, { except: ['method1']);
+nisemono.expects(niseObj2.method2).returns('nise2');
+nisemono.expects(niseObj2.method3).returns('nise3');
+
+assert.equal(niseObj2.method1(), 'nise1');
+assert.equal(niseObj2.method1(), 'nise2');</code></pre><h2>LICENSE</h2><p>MIT License</p>
+<p>Copyright (c) 2017 Hiroki Kumamoto</p>
+<p>Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the &quot;Software&quot;), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:</p>
+<p>The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.</p>
+<p>THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.</p></article>
+    </section>
+
+
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Sun Jan 29 2017 00:05:33 GMT+0000 (UTC) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>
