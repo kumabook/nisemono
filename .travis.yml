@@ -22,6 +22,7 @@ deploy:
   skip_cleanup: true
   on:
     tags: true
+    node: stable
 after_deploy:
   - npm run doc
   - git add doc nisemono.js nisemono.min.js
