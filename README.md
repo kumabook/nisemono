@@ -121,10 +121,10 @@ obj.__proto__ = {
 
 var niseObj1 = nisemono.obj(obj, { only: ['method1', 'method2']);
 nisemono.expects(niseObj1.method1).returns('nise1');
-nisemono.expects(niseObj1.method1).returns('nise2');
+nisemono.expects(niseObj1.method2).returns('nise2');
 
 assert.equal(niseObj1.method1(), 'nise1');
-assert.equal(niseObj1.method1(), 'nise2');
+assert.equal(niseObj1.method2(), 'nise2');
 
 var niseObj2 = nisemono.obj(obj, { except: ['method1']);
 nisemono.expects(niseObj2.method2).returns('nise2');
