@@ -1,6 +1,6 @@
 {
   "name": "nisemono",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Pretty simple test double library",
   "main": "index.js",
   "scripts": {
